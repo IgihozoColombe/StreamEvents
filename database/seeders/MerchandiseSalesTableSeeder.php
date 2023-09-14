@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\MerchSale;
 use Carbon\Carbon;
 
 class MerchandiseSalesTableSeeder extends Seeder
@@ -18,7 +18,7 @@ class MerchandiseSalesTableSeeder extends Seeder
             $salesCount = rand(300, 500); // Number of sales per user
 
             for ($i = 0; $i < $salesCount; $i++) {
-                DB::table('merch_sales')->insert([
+                MerchSale::table('merch_sales')->insert([
                     'id' => $userId,
                     'item_name' => $faker->word,
                     'amount' => rand(1, 100),

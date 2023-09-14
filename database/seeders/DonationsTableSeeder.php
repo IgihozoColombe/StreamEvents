@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Donation;
 use Carbon\Carbon;
 
 class DonationsTableSeeder extends Seeder
@@ -18,7 +18,7 @@ class DonationsTableSeeder extends Seeder
             $donationCount = rand(300, 500); // Number of donations per user
 
             for ($i = 0; $i < $donationCount; $i++) {
-                DB::table('donations')->insert([
+                Donation::table('donations')->insert([
                     'id' => $userId,
                     'amount' => $faker->randomFloat(2, 1, 1000), // Example: 100.00
                     'currency' => 'USD',

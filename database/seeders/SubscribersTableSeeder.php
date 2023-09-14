@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Subscriber;
 use Carbon\Carbon;
 
 class SubscribersTableSeeder extends Seeder
@@ -18,7 +18,7 @@ class SubscribersTableSeeder extends Seeder
             $subscriberCount = rand(300, 500); // Number of subscribers per user
 
             for ($i = 0; $i < $subscriberCount; $i++) {
-                DB::table('subscriber')->insert([
+                Subscriber::table('subscriber')->insert([
                     'id' => $userId,
                     'subscriber_name' => $faker->name,
                     'subscription_tier' => rand(1, 3), // Random subscription tier (1, 2, or 3)

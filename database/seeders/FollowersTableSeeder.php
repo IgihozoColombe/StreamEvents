@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Follower;
 use Carbon\Carbon;
 
 class FollowersTableSeeder extends Seeder
@@ -18,7 +18,7 @@ class FollowersTableSeeder extends Seeder
             $followerCount = rand(300, 500); // Number of followers per user
 
             for ($i = 0; $i < $followerCount; $i++) {
-                DB::table('followers')->insert([
+                Follower::table('followers')->insert([
                     'id' => $userId,
                     'name' => $faker->name,
                     'read_at' => $faker->boolean(50) ? Carbon::now() : null,
