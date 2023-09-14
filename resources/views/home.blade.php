@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <a href="/dashboard">{{ __('click here to go to dashboard') }}</a>
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::get('/view', function () {
     return view('example');
 });
-Route::get('/displaying', function () {
+Route::get('/dashboard', function () {
     return view('display');
 });
 
@@ -27,5 +27,3 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get("/add-student",[StudentController::class, 'create']);
-Route::get("/follow",[FollowerController::class, 'follow']);
