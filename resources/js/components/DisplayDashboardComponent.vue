@@ -34,7 +34,7 @@
 
     <!-- Display Notifications -->
     <div>
-      <h2>Notifications</h2>
+      <h2>List of stream events</h2>
       <ul>
         <!-- Display Unread Notifications -->
         <li v-for="notification in unreadNotifications" :key="notification.id" class="unread-notification">
