@@ -42,9 +42,23 @@ class DashboardController extends Controller
 
     public function getTotalMerchandiseSales()
 {
-    $totalMerchandiseSales = Merch_sale::sum('amount');
+    $totalMerchandiseSales = MerchSale::sum('amount');
     return response()->json(['totalMerchandiseSales' => $totalMerchandiseSales]);
 }
+
+
+public function getTotalFollowersLast30Days()
+{
+    // Calculate the date 30 days ago from today
+    $thirtyDaysAgo = now()->subDays(30);
+
+    // Use Eloquent to count followers in the last 30 days
+    $totalFollowers = Follower::where('created_at', '>=', $thirtyDaysAgo)->count();
+
+    // Return the total followers as a JSON response
+    return response()->json(['totalFollowers' => $totalFollowers]);
+}
+
 
     public function getNotifications(Request $request)
 {

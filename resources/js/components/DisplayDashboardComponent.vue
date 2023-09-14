@@ -9,7 +9,7 @@
    
 
 <div class="stat-box" v-if="totalMerchSales !== null">
-    <div class="stat-label">Total Merchandise Sales (Last 30 Days)</div>
+    <div class="stat-label">Total Revenue(Last 30 Days)</div>
     <div class="stat-value">$ {{ totalMerchSales }}</div>
 </div>
 
@@ -24,10 +24,10 @@
       </ol></div>
         </div>
 
-        <div class="stat-box">
-          <div class="stat-label">Total Followers Gained (Last 30 Days)</div>
-          <div class="stat-value">{{ totalFollowersGained }}</div>
-        </div>
+    <div class="stat-box" v-if="totalFollowersGained !== null">
+  <div class="stat-label">Total Followers Gained (Last 30 Days)</div>
+  <div class="stat-value">{{ totalFollowersGained }}</div>
+</div>
       </div>
     </div>
 
@@ -122,6 +122,7 @@ export default {
     this.fetchRevenue();
     this.fetchTopSellingItems();
     this.fetchTotalMerchandiseSales();
+      this.fetchTotalFollowers();
   },
   methods: {
     fetchFollowers() {
@@ -224,6 +225,16 @@ fetchTotalMerchandiseSales() {
         console.error(error); // Log any errors
     });
 },
+
+fetchTotalFollowers() {
+  axios.get('/api/dashboard/total-followers').then((response) => {
+    console.log(response.data); // Log the response data
+    this.totalFollowersGained = response.data.totalFollowers; // Update the totalFollowersGained property
+  }).catch((error) => {
+    console.error(error); // Log any errors
+  });
+},
+
 
    loadMoreNotifications() {
             // Fetch more notifications from your backend API
