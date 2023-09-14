@@ -31,7 +31,7 @@ class FollowerController extends Controller
         // Return the followers as a JSON response
         return response()->json($followers);
     }
-    public function markAsRead(Donation $donation)
+    public function markAsRead(Follower $follower)
     {
         // Mark the donation as read (update the 'is_read' field)
         $follower->update(['is_read' => true]);

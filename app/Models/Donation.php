@@ -13,6 +13,7 @@ class Donation extends Model
         'amount',
         'currency',
         'donation_message',
+         'is_read',
     ];
 
     public function user(): BelongsTo

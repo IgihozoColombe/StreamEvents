@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Merch_sale extends Model
+class MerchSale extends Model
 {
     use HasFactory;
     protected $table = 'merch_sales';
@@ -13,6 +13,7 @@ class Merch_sale extends Model
         'item_name',
         'amount',
         'price',
+        'is_read',
     ];  
     
     public function user(): BelongsTo

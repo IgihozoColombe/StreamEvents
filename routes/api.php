@@ -31,6 +31,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/merchandise-sales', [MerchSaleController::class, 'index']);
     Route::get('/donations', [DonationController::class, 'index']);
     Route::put('/donations/{donation}/mark-as-read',[DonationController::class, 'markAsRead']);
+    Route::put('/followers/{follower}/mark-as-read',[FollowerController::class, 'markAsRead']);
+    Route::put('/subscribers/{subscriber}/mark-as-read',[SubsccriberController::class, 'markAsRead']);
+    Route::put('/sale/{sale}/mark-as-read',[MerchSaleController::class, 'markAsRead']);
+    Route::get('/dashboard/total-merchandise-sales', [DashboardController::class.'getTotalMerchandiseSales']);
+
 });
 
 

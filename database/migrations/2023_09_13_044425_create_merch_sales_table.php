@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('item_name');
             $table->integer('amount');
             $table->decimal('price', 10, 2); 
-            $table->timestamp('read_at')->nullable();
+            $table->boolean('is_read')->nullable()->default(false);
             $table->timestamps();
 
         });

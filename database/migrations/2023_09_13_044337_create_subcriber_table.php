@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('subscriber_name');
             $table->integer('subscription_tier'); // 1, 2, 3
-            $table->timestamp('read_at')->nullable();
+            $table->boolean('is_read')->nullable()->default(false);
             $table->timestamps();
 
         });

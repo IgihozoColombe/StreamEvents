@@ -4,18 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Follower;
+use App\Models\MerchSale;
 
 class MerchSaleController extends Controller
 {
   // List all merchandise sales for the currently logged-in user
   public function index()
   {
-    $sales = Merch_sale::all(); 
+    $sales = MerchSale::all(); 
 
       return response()->json($sales);
   }
 
+  public function markAsRead(MerchSale $sale)
+  {
+      // Mark the donation as read (update the 'is_read' field)
+      $sale->update(['is_read' => true]);
+
+      // Optionally, you can return a response if needed
+      return response()->json(['message' => 'Sale marked as read']);
+  }
   // Show the form to create a new merchandise sale
   public function create()
   {

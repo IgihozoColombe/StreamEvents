@@ -16,6 +16,14 @@ class SubsccriberController extends Controller
         return response()->json($subscribers);
     }
 
+    public function markAsRead(Subscriber $subscriber)
+    {
+        // Mark the donation as read (update the 'is_read' field)
+        $subscriber->update(['is_read' => true]);
+
+        // Optionally, you can return a response if needed
+        return response()->json(['message' => 'Subscriber marked as read']);
+    }
 
     // Show the form to create a new subscriber
     public function create()

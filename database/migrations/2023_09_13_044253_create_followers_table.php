@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('followers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamp('read_at')->nullable();
+            $table->boolean('is_read')->nullable()->default(false);
             $table->timestamps();
 
  

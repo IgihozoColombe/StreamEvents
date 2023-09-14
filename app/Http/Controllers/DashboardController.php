@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Follower;
 use App\Models\Donation;
 use App\Models\Subscriber;
-use App\Models\MerchandiseSale;
+use App\Models\MerchSale;
 use Carbon\Carbon;
 use App\Models\Notification;
 
@@ -20,15 +20,12 @@ class DashboardController extends Controller
 
         $totalDonations = Donation::where('created_at', '>=', $thirtyDaysAgo)->sum('amount');
         $totalSubscriptions = Subscriber::where('created_at', '>=', $thirtyDaysAgo)->count();
-        $totalMerchSales = Merch_sale::where('created_at', '>=', $thirtyDaysAgo)->sum('amount');
+        $totalMerchSales = MerchSale::where('created_at', '>=', $thirtyDaysAgo)->sum('amount');
         $totalFollowersGained = Follower::where('created_at', '>=', $thirtyDaysAgo)->count();
         $notification = new Notification();
-$notification->user_id = $userBeingFollowed->id; // The user being followed
-$notification->message = auth()->user()->name . " followed you!";
-$notification->is_read = false; // Set as unread initially
-$notification->save();
 
-        $topSellingItems = Merch_sale::select('item_name', DB::raw('SUM(amount) as totalSales'))
+
+        $topSellingItems =MerchSale::select('item_name', MerchSale::raw('SUM(amount) as totalSales'))
             ->groupBy('item_name')
             ->orderByDesc('totalSales')
             ->limit(3)
@@ -42,6 +39,13 @@ $notification->save();
             'topSellingItems' => $topSellingItems,
         ]);
     }
+
+    public function getTotalMerchandiseSales()
+{
+    $totalMerchandiseSales = Merch_sale::sum('amount');
+    return response()->json(['totalMerchandiseSales' => $totalMerchandiseSales]);
+}
+
     public function getNotifications(Request $request)
 {
     // Fetch notifications for the authenticated user

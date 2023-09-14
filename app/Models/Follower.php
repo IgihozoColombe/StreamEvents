@@ -11,6 +11,7 @@ class Follower extends Model
     protected $table = 'followers';
     protected $fillable =[
         'name',
+        'is_read',
     ];
     public function user(): BelongsTo
     {

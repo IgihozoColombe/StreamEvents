@@ -6,19 +6,22 @@
     <div>
       <h2>Statistics</h2>
       <div class="statistics">
-        <div class="stat-box">
-          <div class="stat-label">Total Donations (Last 30 Days)</div>
-          <div class="stat-value">$ {{ totalDonations }}</div>
-        </div>
+   
+
+<div class="stat-box" v-if="totalMerchSales !== null">
+    <div class="stat-label">Total Merchandise Sales (Last 30 Days)</div>
+    <div class="stat-value">$ {{ totalMerchSales }}</div>
+</div>
+
+
+    <!-- Display Top 3 Selling Items -->
+  
 
         <div class="stat-box">
-          <div class="stat-label">Total Subscriptions (Last 30 Days)</div>
-          <div class="stat-value">$ {{ totalSubscriptions }}</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-label">Total Merchandise Sales (Last 30 Days)</div>
-          <div class="stat-value">$ {{ totalMerchSales }}</div>
+          <div class="stat-label">Top Selling Items (Last 30 Days)</div>
+          <div class="stat-value">  <ol>
+        <li v-for="(item, index) in topSellingItems" :key="index">{{ item.item_name }} - {{ item.totalSales }} sold</li>
+      </ol></div>
         </div>
 
         <div class="stat-box">
@@ -26,14 +29,6 @@
           <div class="stat-value">{{ totalFollowersGained }}</div>
         </div>
       </div>
-    </div>
-
-    <!-- Display Top 3 Selling Items -->
-    <div>
-      <h2>Top Selling Items (Last 30 Days)</h2>
-      <ol>
-        <li v-for="(item, index) in topSellingItems" :key="index">{{ item.name }} - {{ item.totalSales }} sold</li>
-      </ol>
     </div>
 
 
@@ -53,8 +48,9 @@
         :key="follower.id"
         :class="{
           'unread-notification': !follower.is_read,
-          'read-notification': follower.is_read
+          'donation-notification-clicked': follower.clicked
         }"
+         @click="markFollowerNotificationAsRead(follower)"
       >
         {{ follower.name }} followed you!
       </li>
@@ -69,26 +65,32 @@
         {{ donation.amount }} donated!
       </li>
          <!-- Display Subscribers -->
-        <li v-for="subscriber in subscribers" :key="subscriber.id" :class="{ 'unread-notification': !subscriber.is_read }">
+        <li v-for="subscriber in subscribers" :key="subscriber.id" :class="{ 'unread-notification': !subscriber.is_read, 'donation-notification-clicked': subscriber.clicked  }"
+            @click="markSubscriberNotificationAsRead(subscriber)">
           {{ subscriber.subscriber_name }} subscribed!
-          <button @click="markSubscriberNotificationAsRead(subscriber)">Mark as Read</button>
-        </li>
-           <li v-for="sale in merchandiseSales" :key="sale.id" :class="{ 'unread-notification': !sale.is_read }">
-          {{ sale.item_name }} sold!
-     
-        </li>
+          </li>
+      
+    <li v-for="sale in merchandiseSales" :key="sale.id" :class="{ 'unread-notification': !sale.is_read, 'donation-notification-clicked': sale.clicked }"
+   @click="markMerchandiseSaleAsRead(sale)">
+    {{ sale.item_name }} sold!
+    </li>
+
 
         <!-- Display Read Notifications -->
         <li v-for="notification in readNotifications" :key="notification.id" class="read-notification">
           {{ notification.message }}
         </li>
       </ul>
+         <infinite-loading :on-infinite="loadMoreNotifications" spinner="circles" ref="infiniteLoading">
+            <div slot="no-more">No more notifications</div>
+        </infinite-loading>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   data() {
@@ -104,6 +106,10 @@ export default {
       totalMerchSales: 0,
       totalFollowersGained: 0,
       topSellingItems: [],
+        visibleNotifications: [],
+            currentPage: 1,
+            perPage: 100,
+      
     };
   },
   created() {
@@ -115,6 +121,7 @@ export default {
     this.fetchNotifications();
     this.fetchRevenue();
     this.fetchTopSellingItems();
+    this.fetchTotalMerchandiseSales();
   },
   methods: {
     fetchFollowers() {
@@ -196,6 +203,48 @@ export default {
         }
       });
     },
+    
+markMerchandiseSaleAsRead(sale) {
+  // Send a request to your backend to mark the sale notification as read
+  axios.put(`/api/sale/${sale.id}/mark-as-read`).then(() => {
+    // Update the sale notification status in the component's data
+    const index = this.merchandiseSales.findIndex((d) => d.id === sale.id);
+    if (index !== -1) {
+      this.merchandiseSales[index].is_read = true;
+    }
+  });
+},
+
+
+fetchTotalMerchandiseSales() {
+    axios.get('/api/dashboard/total-merchandise-sales').then((response) => {
+        console.log(response.data); // Log the response data
+        this.totalMerchSales = response.data.totalMerchandiseSales;
+    }).catch((error) => {
+        console.error(error); // Log any errors
+    });
+},
+
+   loadMoreNotifications() {
+            // Fetch more notifications from your backend API
+            axios.get(`/api/notifications?page=${this.currentPage}&perPage=${this.perPage}`).then((response) => {
+                const newNotifications = response.data.notifications;
+
+                // Append the new notifications to the visibleNotifications array
+                this.visibleNotifications = this.visibleNotifications.concat(newNotifications);
+
+                // Increment the current page number
+                this.currentPage += 1;
+
+                // Check if there are more notifications to load
+                if (newNotifications.length === 0) {
+                    this.$refs.infiniteLoading.complete();
+                } else {
+                    this.$refs.infiniteLoading.loaded();
+                }
+            });
+            },
+
       markNotificationAsRead(notification) {
     // Send a request to your backend to mark the notification as read
     axios.put(`/api/notifications/${notification.id}/mark-as-read`).then(() => {
@@ -265,4 +314,5 @@ export default {
   margin: 4px;
   border: 1px solid #ddd;
 }
+
 </style>

@@ -11,7 +11,8 @@ class Subscriber extends Model
     protected $table = 'subcriber';
     protected $fillable =[
         'subscriber_name',
-        'subscription_tier'
+        'subscription_tier',
+        'is_read',
     ];
     public function user(): BelongsTo
     {

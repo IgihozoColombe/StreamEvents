@@ -16,7 +16,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2); // Example: 100.00
             $table->string('currency');
             $table->text('donation_message')->nullable();
-            $table->timestamp('read_at')->nullable();
+            $table->boolean('is_read')->nullable()->default(false);
             $table->timestamps();
 
         });
