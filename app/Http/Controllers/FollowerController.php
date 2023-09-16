@@ -23,6 +23,11 @@ class FollowerController extends Controller
             // Other relevant data
         ];
     }
+
+    public function create()
+{
+    return view('followers.create'); // Assuming 'followers.create' is your view name
+}
     public function index()
     {
         // Retrieve a list of followers from the database
@@ -39,6 +44,21 @@ class FollowerController extends Controller
         // Optionally, you can return a response if needed
         return response()->json(['message' => 'Notification marked as read']);
     }
+
+    public function store(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id', // Make sure user_id exists in the users table
+        ]);
+
+        // Create a new follower record
+        $follower = Follower::create($validatedData);
+
+        return response()->json(['message' => 'Follower created successfully', 'follower' => $follower], 201);
+    }
+
 
     public function toMail($notifiable)
     {

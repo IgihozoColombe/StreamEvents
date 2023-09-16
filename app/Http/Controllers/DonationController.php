@@ -30,24 +30,19 @@ class DonationController extends Controller
         return view('donations.create');
     }
 
-    // Store a new donation
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request data
+        $validatedData = $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'currency' => 'required|string|max:255',
             'donation_message' => 'nullable|string|max:255',
+            'user_id' => 'required|exists:users,id', // Make sure user_id exists in the users table
         ]);
 
-        $donation = new Donation([
-            'amount' => $request->input('amount'),
-            'currency' => $request->input('currency'),
-            'donation_message' => $request->input('donation_message'),
-        ]);
+        // Create a new donation record
+        $donation = Donation::create($validatedData);
 
-        auth()->user()->donations()->save($donation);
-        auth()->user()->notify(new DonationCreatedNotification($donation));
-
-        return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
+        return response()->json(['message' => 'Donation created successfully', 'donation' => $donation], 201);
     }
 }

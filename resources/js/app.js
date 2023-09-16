@@ -8,6 +8,10 @@ import './bootstrap';
 import { createApp } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue';
 import DisplayDashboardComponent from '../js/components/DisplayDashboardComponent.vue'
+import CreateFollowerComponent from '../js/components/CreateFollower.vue'
+import CreateDonationComponent from '../js/components/createDonation.vue'
+import createMerchSale from '../js/components/createMerchSale.vue'
+import createSubscriber from '../js/components/createSubscriber.vue'
 import Echo from 'laravel-echo';
 import io from 'socket.io-client';
 
@@ -27,6 +31,10 @@ echo.channel('public').listen('.notification', (data) => {
 });
 app.component('example-component', ExampleComponent);
 app.component('display-component', DisplayDashboardComponent);
+app.component('create-component', CreateFollowerComponent);
+app.component('donation-component', CreateDonationComponent);
+app.component('merch-component', createMerchSale);
+app.component('subscriber-component', createSubscriber);
 
 
 

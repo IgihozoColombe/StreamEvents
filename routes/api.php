@@ -36,8 +36,18 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/sale/{sale}/mark-as-read',[MerchSaleController::class, 'markAsRead']);
     Route::get('/dashboard/total-merchandise-sales', [DashboardController::class,'getTotalMerchandiseSales']);
     Route::get('/dashboard/total-followers', [DashboardController::class,'getTotalFollowersLast30Days']);
+    Route::post('/followers', [FollowerController::class,'store']);
+
+
+    // Create a new donation
+    Route::post('/donations', [DonationController::class, 'store']);
+
+    // Create a new merchandise sale
+    Route::post('/merchandise-sales', [MerchSaleController::class,'store']);
+    Route::post('/subscribers', [SubsccriberController::class,'store']);
 
 });
+
 
 
 

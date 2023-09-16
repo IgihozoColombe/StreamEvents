@@ -32,22 +32,21 @@ class SubsccriberController extends Controller
     }
 
     // Store a new subscriber
-    public function store(Request $request)
-    {
-        $request->validate([
-            'subscriber_name' => 'required|string|max:255',
-            'subscription_tier' => 'required|integer|between:1,3',
-        ]);
 
-        $subscriber = new Subscriber([
-            'subscriber_name' => $request->input('subscriber_name'),
-            'subscription_tier' => $request->input('subscription_tier'),
-        ]);
+    
+  public function store(Request $request)
+  {
+      // Validate the incoming request data
+      $validatedData = $request->validate([
+        'subscriber_name' => 'required|string|max:255',
+        'subscription_tier' => 'required|integer|between:1,3',
+        'user_id' => 'required|exists:users,id', // Make sure user_id exists in the users table
+      ]);
 
-        auth()->user()->subscribers()->save($subscriber);
-        auth()->user()->notify(new SubscriptionCreatedNotification($subscription));
+      // Create a new donation record
+      $subscriber = Subscriber::create($validatedData);
 
-        return redirect()->route('subscribers.index')->with('success', 'Subscriber created successfully!');
-    }
+      return response()->json(['message' => 'subscriber created successfully', 'subscriber' => $subscriber], 201);
+  }
    
 }

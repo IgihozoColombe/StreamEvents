@@ -31,22 +31,20 @@ class MerchSaleController extends Controller
   }
 
   // Store a new merchandise sale
+
   public function store(Request $request)
   {
-      $request->validate([
+      // Validate the incoming request data
+      $validatedData = $request->validate([
+          'amount' => 'required|numeric',
           'item_name' => 'required|string|max:255',
-          'amount' => 'required|integer|min:1',
           'price' => 'required|numeric|min:0.01',
+          'user_id' => 'required|exists:users,id', // Make sure user_id exists in the users table
       ]);
 
-      $sale = new MerchandiseSale([
-          'item_name' => $request->input('item_name'),
-          'amount' => $request->input('amount'),
-          'price' => $request->input('price'),
-      ]);
+      // Create a new donation record
+      $sale = MerchSale::create($validatedData);
 
-      auth()->user()->merchandiseSales()->save($sale);
-      auth()->user()->notify(new MerchandiseSaleCreatedNotification($sale));
-      return redirect()->route('merch_sales.index')->with('success', 'Merchandise sale created successfully!');
+      return response()->json(['message' => 'sale created successfully', 'sale' => $sale], 201);
   }
 }
